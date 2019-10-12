@@ -1,4 +1,4 @@
-package com.prntpage.BnbService;
+package com.prntpage.BnbServiceV1;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +10,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class BnbServiceApplicationTests {
 
 	@Test
-	public void contextLoads() {
-	}
+	public void contextLoads() { }
 
 }

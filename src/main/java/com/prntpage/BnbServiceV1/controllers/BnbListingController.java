@@ -2,7 +2,9 @@ package com.prntpage.BnbServiceV1.controllers;
 
 import com.prntpage.BnbServiceV1.models.BnbListing;
 import com.prntpage.BnbServiceV1.repositories.BnbListingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -15,11 +17,8 @@ import java.util.UUID;
 @RequestMapping("/bnbListings")
 public class BnbListingController {
 
+    @Autowired
     private BnbListingRepository bnbListingRepository;
-
-    public BnbListingController(BnbListingRepository bnbListingRepository) {
-        this.bnbListingRepository = bnbListingRepository;
-    }
 
     @GetMapping()
     public Flux<BnbListing> list() {
@@ -62,12 +61,10 @@ public class BnbListingController {
     }
 
 
-    // By User
+    // Streaming
 
-    @GetMapping("/user/{userId}")
-    public Flux<ResponseEntity<BnbListing>> listByUserId(@PathVariable final UUID userId) {
-        return bnbListingRepository.findByUserId(userId)
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<BnbListing> streamAll() {
+        return bnbListingRepository.findAll();
     }
 }

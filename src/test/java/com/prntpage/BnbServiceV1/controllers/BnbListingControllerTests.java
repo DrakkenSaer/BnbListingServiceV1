@@ -1,0 +1,138 @@
+package com.prntpage.BnbServiceV1.controllers;
+
+import com.prntpage.BnbServiceV1.models.BnbListing;
+import com.prntpage.BnbServiceV1.repositories.BnbListingRepository;
+import org.assertj.core.api.Assertions;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class BnbListingControllerTests {
+
+    @Autowired
+    private WebTestClient webTestClient;
+
+    @Autowired
+    private BnbListingRepository bnbListingRepository;
+
+    private final BnbListing bnbListingObj = new BnbListing(
+            UUID.randomUUID(),
+            "Title",
+            "Description",
+            "Address",
+            "ListType",
+            "BuildingType",
+            100.50,
+            10.0,
+            4.0,
+            10,
+            List.of(),
+            10,
+            9.25,
+            10.50,
+            "Keypad",
+            List.of("Breakfast"),
+            List.of("A/C", "TV"),
+            List.of("Stairs"),
+            List.of(),
+            List.of()
+    );
+
+    @Test
+    public void testCreate() {
+        webTestClient.post().uri("/bnbListings")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .body(Mono.just(bnbListingObj), BnbListing.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody()
+                .jsonPath("$.id").isNotEmpty()
+                .jsonPath("$.title").isEqualTo("Title");
+    }
+
+    @Test
+    public void testGetAll() {
+        webTestClient.get().uri("/bnbListings")
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBodyList(BnbListing.class);
+    }
+
+    @Test
+    public void testGetById() {
+        BnbListing bnbListing = bnbListingRepository.save(bnbListingObj).block();
+
+        webTestClient.get()
+                .uri("/bnbListings/{id}", Collections.singletonMap("id", bnbListing.getId()))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(response -> Assertions.assertThat(response.getResponseBody()).isNotNull());
+    }
+
+    @Test
+    public void testUpdate() {
+        BnbListing bnbListing = bnbListingRepository.save(bnbListingObj).block();
+        BnbListing newBnbListing = new BnbListing(
+                UUID.randomUUID(),
+                "New Title",
+                null,
+                "New Address",
+                "ListType",
+                null,
+                10.0,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        webTestClient.put()
+                .uri("/bnbListings/{id}", Collections.singletonMap("id", bnbListing.getId()))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .body(Mono.just(newBnbListing), BnbListing.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody()
+                .jsonPath("$.title").isEqualTo(newBnbListing.getTitle())
+                .jsonPath("$.address").isEqualTo(newBnbListing.getAddress())
+                .jsonPath("$.totalBathrooms").isEqualTo(newBnbListing.getTotalBathrooms());
+
+    }
+
+    @Test
+    public void testDelete() {
+        BnbListing bnbListing = bnbListingRepository.save(bnbListingObj).block();
+
+        webTestClient.delete()
+                .uri("/bnbListings/{id}", Collections.singletonMap("id",  bnbListing.getId()))
+                .exchange()
+                .expectStatus().isOk();
+    }
+}
