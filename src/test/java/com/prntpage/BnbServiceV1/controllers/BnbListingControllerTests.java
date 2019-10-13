@@ -97,7 +97,7 @@ public class BnbListingControllerTests {
                 null,
                 10.0,
                 null,
-                null,
+                0.0,
                 null,
                 null,
                 null,

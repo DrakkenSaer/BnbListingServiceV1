@@ -115,8 +115,56 @@ public class BnbListing implements BaseEntity {
     }
 
     public void update(BnbListing bnbListing) {
-        if (title != null) {
+        if (bnbListing.getTitle() != null) {
             this.setTitle(bnbListing.getTitle());
+        }
+        if (bnbListing.getAddress() != null) {
+            this.setAddress(bnbListing.getAddress());
+        }
+        if (bnbListing.getListType() != null) {
+            this.setListType(bnbListing.getListType());
+        }
+        if (bnbListing.getBuildingType() != null) {
+            this.setBuildingType(bnbListing.getBuildingType());
+        }
+        if (bnbListing.getPrice() != null) {
+            this.setPrice(bnbListing.getPrice());
+        }
+        if (bnbListing.getCleaningFee() != null) {
+            this.setCleaningFee(bnbListing.getCleaningFee());
+        }
+        if (bnbListing.getTotalBathrooms() != null) {
+            this.setTotalBathrooms(bnbListing.getTotalBathrooms());
+        }
+        if (bnbListing.getTotalBedrooms() != null) {
+            this.setTotalBedrooms(bnbListing.getTotalBedrooms());
+        }
+        if (bnbListing.getBedrooms() != null) {
+            this.setBedrooms(bnbListing.getBedrooms());
+        }
+        if (bnbListing.getMaxGuests() != null) {
+            this.setMaxGuests(bnbListing.getMaxGuests());
+        }
+        if (bnbListing.getCheckIn() != null) {
+            this.setCheckIn(bnbListing.getCheckIn());
+        }
+        if (bnbListing.getCheckOut() != null) {
+            this.setCheckOut(bnbListing.getCheckOut());
+        }
+        if (bnbListing.getCheckInType() != null) {
+            this.setCheckInType(bnbListing.getCheckInType());
+        }
+        if (bnbListing.getServices() != null) {
+            this.setServices(bnbListing.getServices());
+        }
+        if (bnbListing.getStayAmenities() != null) {
+            this.setStayAmenities(bnbListing.getStayAmenities());
+        }
+        if (bnbListing.getAccessibilityAmenities() != null) {
+            this.setAccessibilityAmenities(bnbListing.getAccessibilityAmenities());
+        }
+        if (bnbListing.getSafetyAmenities() != null) {
+            this.setSafetyAmenities(bnbListing.getSafetyAmenities());
         }
     }
 }

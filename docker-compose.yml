@@ -1,14 +1,22 @@
 version: '3'
 
 services:
-  mongoDB:
-    image: mongo:latest
+  mongodb:
+    image: mongo
     ports:
-      - '27017:27017'
-    volumes:
-      - db-data:/data/db
-      - mongo-config:/data/configdb
+      - 27017:27017
+#    environment:
+#      - MONGO_INITDB_ROOT_USERNAME=user
+#      - MONGO_INITDB_ROOT_PASSWORD=password
+#    volumes:
+      # if you wish to setup additional user accounts specific per DB or with different roles you can use following entry point
+#      - "$PWD/mongo-entrypoint/:/docker-entrypoint-initdb.d/"
+#    command: mongod
 
-volumes:
-  db-data:
-  mongo-config:
+#    volumes:
+#      - db-data:/data/db
+#      - mongo-config:/data/configdb
+#
+#volumes:
+#  db-data:
+#  mongo-config:
