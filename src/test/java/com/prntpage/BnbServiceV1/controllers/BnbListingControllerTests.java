@@ -1,7 +1,9 @@
 package com.prntpage.BnbServiceV1.controllers;
 
 import com.prntpage.BnbServiceV1.models.BnbListing;
+import com.prntpage.BnbServiceV1.models.BnbRoom;
 import com.prntpage.BnbServiceV1.repositories.BnbListingRepository;
+import com.prntpage.BnbServiceV1.utils.JwtTokenUtil;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +26,9 @@ public class BnbListingControllerTests {
     private WebTestClient webTestClient;
 
     @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
     private BnbListingRepository bnbListingRepository;
 
     private final BnbListing bnbListingObj = new BnbListing(
@@ -37,7 +42,7 @@ public class BnbListingControllerTests {
             10.0,
             4.0,
             10,
-            List.of(),
+            List.of(new BnbRoom("Queen", "Bunkbed")),
             10,
             9.25,
             10.50,
@@ -51,7 +56,10 @@ public class BnbListingControllerTests {
 
     @Test
     public void testCreate() {
+        final String jwtToken = jwtTokenUtil.generateJwtBuilder("test:test");
+
         webTestClient.post().uri("/bnbListings")
+                .header("Authorization", "Bearer " + jwtToken)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(bnbListingObj), BnbListing.class)
@@ -65,7 +73,10 @@ public class BnbListingControllerTests {
 
     @Test
     public void testGetAll() {
+        final String jwtToken = jwtTokenUtil.generateJwtBuilder("test:test");
+
         webTestClient.get().uri("/bnbListings")
+                .header("Authorization", "Bearer " + jwtToken)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isOk()
@@ -75,10 +86,12 @@ public class BnbListingControllerTests {
 
     @Test
     public void testGetById() {
-        BnbListing bnbListing = bnbListingRepository.save(bnbListingObj).block();
+        final String jwtToken = jwtTokenUtil.generateJwtBuilder("test:test");
+        final BnbListing bnbListing = bnbListingRepository.save(bnbListingObj).block();
 
         webTestClient.get()
                 .uri("/bnbListings/{id}", Collections.singletonMap("id", bnbListing.getId()))
+                .header("Authorization", "Bearer " + jwtToken)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
@@ -87,8 +100,9 @@ public class BnbListingControllerTests {
 
     @Test
     public void testUpdate() {
-        BnbListing bnbListing = bnbListingRepository.save(bnbListingObj).block();
-        BnbListing newBnbListing = new BnbListing(
+        final String jwtToken = jwtTokenUtil.generateJwtBuilder("test:test");
+        final BnbListing bnbListing = bnbListingRepository.save(bnbListingObj).block();
+        final BnbListing newBnbListing = new BnbListing(
                 UUID.randomUUID(),
                 "New Title",
                 null,
@@ -99,7 +113,7 @@ public class BnbListingControllerTests {
                 null,
                 0.0,
                 null,
-                null,
+                List.of(new BnbRoom("Queen", "Bunkbed"), new BnbRoom("Twin", "Bunkbed")),
                 null,
                 null,
                 null,
@@ -113,6 +127,7 @@ public class BnbListingControllerTests {
 
         webTestClient.put()
                 .uri("/bnbListings/{id}", Collections.singletonMap("id", bnbListing.getId()))
+                .header("Authorization", "Bearer " + jwtToken)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .body(Mono.just(newBnbListing), BnbListing.class)
@@ -128,10 +143,12 @@ public class BnbListingControllerTests {
 
     @Test
     public void testDelete() {
-        BnbListing bnbListing = bnbListingRepository.save(bnbListingObj).block();
+        final String jwtToken = jwtTokenUtil.generateJwtBuilder("test:test");
+        final BnbListing bnbListing = bnbListingRepository.save(bnbListingObj).block();
 
         webTestClient.delete()
                 .uri("/bnbListings/{id}", Collections.singletonMap("id",  bnbListing.getId()))
+                .header("Authorization", "Bearer " + jwtToken)
                 .exchange()
                 .expectStatus().isOk();
     }
