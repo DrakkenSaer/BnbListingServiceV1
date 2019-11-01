@@ -18,9 +18,6 @@ import java.util.UUID;
 @RequestMapping("/bnbListings")
 public class BnbListingController {
 
-//    @Autowired
-//    private AuthenticationManager authenticationManager;
-
     @Autowired
     private BnbListingRepository bnbListingRepository;
 

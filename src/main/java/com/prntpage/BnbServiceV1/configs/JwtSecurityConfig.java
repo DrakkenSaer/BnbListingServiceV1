@@ -47,9 +47,4 @@ public class JwtSecurityConfig {
                 .and().build();
     }
 
-//    @Override
-//    @Bean
-//    public AuthenticationManager authenticationManagerBean() throws Exception {
-//        return super.authenticationManagerBean();
-//    }
 }
