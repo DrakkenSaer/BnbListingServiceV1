@@ -28,6 +28,7 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
     public Mono<Authentication> authenticate(Authentication authentication) {
         DecodedJWT jwtToken = jwtTokenUtil.verify(authentication.getCredentials().toString());
 
+        // TODO: Refactor & add safety checking
         if (jwtToken.getClaim("auth") != null) {
             List<String> usernameAndPassword = Arrays.asList(jwtToken.getClaim("auth").asString().split(":"));
             Collection<? extends GrantedAuthority> authorities = usernameAndPassword.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
