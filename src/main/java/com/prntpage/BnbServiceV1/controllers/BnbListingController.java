@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,6 +17,9 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/bnbListings")
 public class BnbListingController {
+
+//    @Autowired
+//    private AuthenticationManager authenticationManager;
 
     @Autowired
     private BnbListingRepository bnbListingRepository;
